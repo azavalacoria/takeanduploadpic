@@ -21,7 +21,7 @@ else if (strcmp($data[2], "Android") == 0) {
 if ($isAppleDevice || $androidDevice) {
 	$file = file_get_contents("mobileVersion.php");
 } else {
-	$file = file_get_contents("mobileVersion.php");
+	$file = file_get_contents("webVersion.php");
 }
 
 echo "$file";

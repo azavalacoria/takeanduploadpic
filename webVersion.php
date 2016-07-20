@@ -86,6 +86,19 @@
 				$("#upload").hide();
 			});
 
+		document.getElementById("clear").addEventListener("click", function() {
+				$("#canvas").hide();
+				$("#video").fadeIn();
+				$("#uploaded").hide();
+				$("#snap").show();
+				$("#reset").hide();
+				$("#upload").hide();
+				$("#control-number").val("");
+				$("#names").html("");
+				$("#first-lastname").html("");
+				$("#second-lastname").html("");
+			});
+
 		// Upload image to sever
 		document.getElementById("upload").addEventListener("click", function(){
 			var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
@@ -94,14 +107,14 @@
 				type: "POST",
 				url: "savePicture.php",
 				data: { 
-					imgBase64: dataUrl
+					imgBase64: dataUrl, id: $("#control-number").val()
 				},
 				success: function(data){
 					console.log(data);
 					$('#camFeedback').html(data);
 				}
 			}).done(function(msg) {
-				console.log("saved");
+				console.log("saved " + msg);
 				$("#uploading").hide();
 				$("#uploaded").show();
 			});
@@ -117,17 +130,25 @@
 		</div>
 	</header>
 	<div class="container">
-		
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+				<div class="alert alert-danger" id="noStudent" style="display:none">
+					<span>
+						<p>No se encontró el número de control.</p>
+					</span>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 				<label>Número de Control</label>
 				<br>
-				<input type="number" class="form-control" id="control-number" maxlength="8">
+				<input type="number" class="form-control" id="control-number" maxlength="8" onKeyUp="getStudent();">
 				<div>
 					<br><br>
-					<label id="names">ASDFGHJ</label> <br>
-					<label id="first-lastname">XCKXCMOD</label> <br>
-					<label id="second-lastname">DOMODSMOS</label> <br>
+					<label id="names"></label> <br>
+					<label id="first-lastname"></label> <br>
+					<label id="second-lastname"></label> <br>
 				</div>
 			</div>
 			
@@ -138,7 +159,7 @@
 				<div class="camcontent">
 					<canvas id="canvas" width="640" height="480" style="display:none;"> </canvas>
 				</div>
-				<div class="cambuttons" style="margin-top: 10px;">
+				<div class="cambuttons" id="cambuttons" style="margin-top: 10px; display: none;">
 					<button id="snap" class="btn btn-primary" style="">
 						<i class="fa fa-camera"></i>
 						Capturar fotografía
@@ -155,7 +176,10 @@
 						Guardando fotogragía . . .
 					</span>
 					<span id="uploaded" style="display: none;">
-						¡La fotografía se ha guardado correctamente!. <a>Atrás.</a>
+						¡La fotografía se ha guardado correctamente!. 
+						<button id="clear" type="button" class="btn btn-success">
+							Limpiar
+						</button>
 					</span>
 				</div>
 				<div id="camFeedback"></div>
@@ -165,5 +189,6 @@
 	
 	<script src="js/jquery-2.1.3.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/ajax.js"></script>
 </body>
 </html>
